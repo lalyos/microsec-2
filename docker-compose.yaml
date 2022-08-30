@@ -1,26 +1,57 @@
 services:
+  nginx-proxy:
+    ports:
+      - 80:80
+    volumes:
+      - '/var/run/docker.sock:/tmp/docker.sock:ro'
+    image: nginxproxy/nginx-proxy
+
   mydb:
     image: postgres:14-alpine
     environment:
-      - POSTGRES_PASSWORD=s3cr3t
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - 5432:5432
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
       - testdata:/var/lib/postgresql/data
+    profiles:
+      - debug
+
+  adminer:
+    image: adminer
+    environment:
+      - VIRTUAL_HOST=adminer.vcap.me
+    ports:
+      - 8080
+    profiles:
+      - debug
+
+  lunch:
+    image: lunch:v6
+    environment:
+      - TITLE=Lunch break
+      - COLOR=yellow
+      - VIRTUAL_HOST=luncs.vcap.me
+    ports:
+      - 80
 
   backend:
     image: cmd.cat/curl/psql/dig
+    init: true
     command: sleep 9999
+    environment:
+      - DBHOST=${DBHOST:-mydb}
 
   frontend:
     #image: lunch:v5
     build: .
     init: true
     environment:
-      - TITLE="Vege !!!!!"
-      - COLOR=lime
-      - BODY=${BODY:-<iframe src="https://giphy.com/embed/Oiz9U1yySV2vxSDiH6" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/food-illustration-pizza-Oiz9U1yySV2vxSDiH6">via GIPHY</a></p>}
+      - VIRTUAL_HOST=front.vcap.me
+      - TITLE=${TITLE:-Dev env}
+      - COLOR=${COLOR:-lightgreen}
+      - BODY=${BODY:-Use TITLE/COLOR and BODY env vars or VAR_FILE}
 
     ports:
       - 80
