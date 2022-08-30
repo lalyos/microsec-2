@@ -1,0 +1,29 @@
+services:
+  mydb:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_PASSWORD=s3cr3t
+    ports:
+      - 5432:5432
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      - testdata:/var/lib/postgresql/data
+
+  backend:
+    image: cmd.cat/curl/psql/dig
+    command: sleep 9999
+
+  frontend:
+    #image: lunch:v5
+    build: .
+    init: true
+    environment:
+      - TITLE="Vege !!!!!"
+      - COLOR=lime
+      - BODY=${BODY:-<iframe src="https://giphy.com/embed/Oiz9U1yySV2vxSDiH6" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/food-illustration-pizza-Oiz9U1yySV2vxSDiH6">via GIPHY</a></p>}
+
+    ports:
+      - 80
+
+volumes:
+  testdata:
