@@ -15,6 +15,8 @@ file_env() {
 }
 
 file_env BODY
+file_env TITLE
+file_env COLOR
 
 cat > /var/www/html/index.html <<EOF
 <html>
