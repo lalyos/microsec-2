@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   nginx-proxy:
     ports:
@@ -15,20 +16,22 @@ services:
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
       - testdata:/var/lib/postgresql/data
-    profiles:
-      - debug
+    # profiles:
+    #   - debug
 
   adminer:
     image: adminer
+    labels:
+      traefik.frontend.auth.basic: admin:$1$I5Kt8BwT$G4y6mBV3xVzyZKUECxqV61
     environment:
       - VIRTUAL_HOST=adminer.vcap.me
     ports:
       - 8080
-    profiles:
-      - debug
+    # profiles:
+    #   - debug
 
   lunch:
-    image: lunch:v6
+    image: lalyos/lunch:v7
     environment:
       - TITLE=Lunch break
       - COLOR=yellow
@@ -44,8 +47,8 @@ services:
       - DBHOST=${DBHOST:-mydb}
 
   frontend:
-    #image: lunch:v5
-    build: .
+    image: lalyos/lunch:v7
+    #build: .
     init: true
     environment:
       - VIRTUAL_HOST=front.vcap.me
