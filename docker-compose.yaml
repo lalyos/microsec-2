@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 services:
   nginx-proxy:
     ports:
@@ -7,17 +7,17 @@ services:
       - '/var/run/docker.sock:/tmp/docker.sock:ro'
     image: nginxproxy/nginx-proxy
 
-  mydb:
-    image: postgres:14-alpine
-    environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    ports:
-      - 5432:5432
-    volumes:
-      - ./sql:/docker-entrypoint-initdb.d
-      - testdata:/var/lib/postgresql/data
-    # profiles:
-    #   - debug
+  # mydb:
+  #   image: postgres:14-alpine
+  #   environment:
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - ./sql:/docker-entrypoint-initdb.d
+  #     - testdata:/var/lib/postgresql/data
+  #   # profiles:
+  #   #   - debug
 
   adminer:
     image: adminer
@@ -33,8 +33,8 @@ services:
   lunch:
     image: lalyos/lunch:v7
     environment:
-      - TITLE=Lunch break
-      - COLOR=yellow
+      - TITLE=${TITLE}
+      - COLOR=${COLOR}
       - VIRTUAL_HOST=luncs.vcap.me
     ports:
       - 80
@@ -52,7 +52,7 @@ services:
     init: true
     environment:
       - VIRTUAL_HOST=front.vcap.me
-      - TITLE=${TITLE:-Dev env}
+      - TITLE=${TITLE}
       - COLOR=${COLOR:-lightgreen}
       - BODY=${BODY:-Use TITLE/COLOR and BODY env vars or VAR_FILE}
 
