@@ -24,6 +24,10 @@ cat > /var/www/html/index.html <<EOF
 <body bgcolor=${COLOR} >
   <h2>${TITLE}</h2>
   ${BODY}
+	<hr/>
+  HOSTNAME: ${HOSTNAME}
+	<hr/>
+	version: v7 start date: $(date)
 </body>
 </html>
 EOF
