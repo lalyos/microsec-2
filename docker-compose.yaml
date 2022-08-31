@@ -21,8 +21,8 @@ services:
 
   adminer:
     image: adminer
-    labels:
-      traefik.frontend.auth.basic: admin:$1$I5Kt8BwT$G4y6mBV3xVzyZKUECxqV61
+    # labels:
+    #   traefik.frontend.auth.basic: 'admin:$1$I5Kt8BwT$G4y6mBV3xVzyZKUECxqV61'
     environment:
       - VIRTUAL_HOST=adminer.vcap.me
     ports:
