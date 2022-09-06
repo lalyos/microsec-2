@@ -1,11 +1,5 @@
 # microsec-2
 
-## todo
-
-- multi stage
-- Dockerfile USER
-- docker run —net=container:xx
-
 ## topics
 
 - docker run
